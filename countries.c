@@ -5,14 +5,14 @@
 void swap (long long *x, long long *y);
 long long int ch_pivot (long long int i, long long int j);
 void quicksort (long long array[], long long int m, long long int n);
-void BinarySearch(long long array[], long long);
+long long  BinarySearch(long long array[], long long);
 
 int main (int argc, char ** argv) {
 
 FILE * fp;
-long long int N,i;
+long long int N,i,k;
 long long int * list;
-
+long long int answer,exclusions,val;
 fp=fopen(argv[1],"r");
 fscanf(fp,"%lld", &N);
 list =(long long *)calloc(N,sizeof(long long int));
@@ -23,9 +23,24 @@ quicksort(list,0,N-1);
 /*for (i=0; i<N; i++) 
    printf("%lld ",list[i]);
    printf("\n");*/
-BinarySearch(list,N);
+answer=BinarySearch(list,N);
+i=0;
+for (k=(answer-1); k<N; k++) {
+  if (list[k]%2==0)
+     val=list[k]/2;
+  else 
+     val=list[k]/2+1;
+ if(list[i]<val)
+   i++;
+ else {
+   exclusions=k;
+   i++;
+ }
 
+}
 
+exclusions=N-1-exclusions;
+printf("%lld %lld\n",answer,exclusions);
 free(list);
 return 0;
 }
@@ -74,7 +89,7 @@ long long int key,i,j,k;
 }
 
 
-void BinarySearch(long long int list[], long long int N) {
+long long BinarySearch(long long int list[], long long int N) {
   long long int i=0;
   long long int up,down;
   long long int k,temp,failed,answer,val;
@@ -87,7 +102,7 @@ void BinarySearch(long long int list[], long long int N) {
 
  while(down<=up) {
 
- printf("%lld %lld %lld %lld %d\n",answer,up,down,temp,flag); 
+ //printf("%lld %lld %lld %lld %d\n",answer,up,down,temp,flag); 
  i=0;
   for(k=(temp-1); k<N; k++) {   //parathuro metakinisis
     if (list[k]%2==0)
@@ -129,5 +144,5 @@ void BinarySearch(long long int list[], long long int N) {
 
 
 }
-printf("%lld\n", answer);
+return answer;
 }
