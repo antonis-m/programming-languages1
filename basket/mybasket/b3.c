@@ -24,22 +24,19 @@ fp=fopen(argv[1],"r");
 fscanf(fp,"%lld %lld",&N,&K);
 
 list=malloc(N*sizeof(diad));
-team=calloc(K,sizeof(long long));
-
-min=0; max=0; track=0;
-
+//min=0; max=0; track=0;
 
 for(i=0; i<N; i++) {
   fscanf(fp,"%lld",&list[i].tribe);
   fscanf(fp,"%lld",&list[i].upsos);
- 
 }
+
 
 
 partition(list,K,N,0,N-1);
 
 
-free(team);
+
 free(list);
 return 0;
 }
@@ -55,11 +52,15 @@ void swap (diad * x, diad * y) {
 
 void partition(diad list[], long long K,long long N, long long left, long long right) {
 
-long long counter,avg,diff,i,pivot,key,j,min,max;
+long long counter,avg,diff,i,pivot,key,j,min,max,track;
 int flag_left, flag_right;
+long long * team;
+team=calloc(K,sizeof(long long));
 counter=K;
 max=list[0].upsos;
 min=list[0].upsos;
+flag_left=0;
+flag_right=0;
 
 for (i=0; i<N; i++) {
   if (list[i].upsos>max)
@@ -69,6 +70,7 @@ for (i=0; i<N; i++) {
 }
 
  avg=(max-min)/2;
+ printf("avg : %lld",avg);
  diff=abs(list[0].upsos,avg);
  pivot=0;
  for(i=0; i<N; i++) {
@@ -82,18 +84,18 @@ printf("pivot : %lld \n",list[pivot].upsos);
 
 min=left;
 max=right;
-
+track=list[pivot].upsos;
 
 
 if( min < max)
  {
 
-//    printf("%lld %lld \n",min,max);  
+  
     swap(&list[min],&list[pivot]);
       key = list[min].upsos;
       i = min+1;
       j = max;
-//      printf("%lld %lld \n",i,j);
+
       while(i <= j)
       {
          while((i <= max) && (list[i].upsos <= key))
@@ -103,12 +105,42 @@ if( min < max)
         if( i < j)
                 swap(&list[i],&list[j]);
       }
-      // swap two elements
+
       swap(&list[min],&list[j]);
       
    }
+for(i=0; i<N; i++)
+  printf("%lld ",list[i].upsos);
+printf("\n");
+track=0;
+while(track<=j) {
+  if (team[list[track].tribe-1]==0) {
+    team[list[track].tribe-1]=1;
+    counter--;
+    track++;
+  } else
+    track++;
+}
+if (counter==0)
+  flag_left=1;
 
-for (i=0; i<N; i++)
-  printf("%lld\n",list[i].upsos);
+counter=K;
+for(i=0; i<K; i++)
+  team[i]=0;
 
+track=right;
+while(track>j) {
+ if(team[list[track].tribe-1]==0) {
+   team[list[track].tribe-1]=1;
+   counter--;
+   track--;
+ } else
+   track--;
+}
+
+if(counter==0)
+  flag_right=1;
+
+printf("%d %d \n",flag_right,flag_left);
+free(team);
 }
