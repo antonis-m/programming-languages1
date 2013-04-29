@@ -16,103 +16,68 @@ void quicksort_tribe (diad array[], long long int m, long long int n);
 int main (int argc, char ** argv) {
 
 FILE * fp;
-long long N,K,i,min,max,track, left, right;
+long long N,K,i,min,max,track,counter;
+diad left,right;
 diad * list;
-long long * team1,* team2, *check;
+long long * team;
 int flagl, flagr;
+counter=0;
+
 fp=fopen(argv[1],"r");
 fscanf(fp,"%lld %lld",&N,&K);
 
 list=malloc(N*sizeof(diad));
-team1=calloc(K,sizeof(long long));
-team2=calloc(K,sizeof(long long));
-check=calloc(K,sizeof(long long));
+team=calloc(K,sizeof(long long));
 
-min=0; max=N-1; flagl=flagr=1;
+min=0; max=0; track=0;
 
 
 for(i=0; i<N; i++) {
   fscanf(fp,"%lld",&list[i].tribe);
   fscanf(fp,"%lld",&list[i].upsos);
-  team1[list[i].tribe-1]+=1;
-  team2[list[i].tribe-1]+=1;  
+ 
 }
 
 
 quicksort_upsos(list,0,N-1);
 
-/*for (i=0; i<N; i++)
+for (i=0; i<N; i++)
   printf("%lld ", list[i].upsos);
 printf("\n");
 for(i=0; i<N; i++)
   printf("%lld ",list[i].tribe);
 printf("\n");
+
+/*team[list[0].tribe-1]=list[0].upsos;
+tribes=list[0].tribe;
+i=1;
+while (tribes==list[0].tribe) {
+ team[list[0].tribe-1]=list[i].upsos ;
+ tribes=list[i].tribe;
+ i++;
+}
 */
 
-while ((min <= N-1) && (flagl==1)){
- track=list[min].tribe;
- team1[track-1]-=1;
- if (team1[track-1]==0)
-   flagl=0;
- else
-   min++;
+left=right=list[0];
+i=0;
 
+while(counter<K) {
+ right=list[i];
+ if (team[right.tribe-1]==0){
+   team[right.tribe-1]=1;
+   counter++;
+ }
+ i++;
 }
-
-track=list[min].tribe;
-team2[track-1]=-10;
-free(team1);
-
-while ((max >= 0) && (flagr==1)){
- track=list[max].tribe;
- team2[track-1]-=1;
- if (team2[track-1]==0)
-   flagr=0;
- else
-   max--;
-
-}
-free(team2);
-
-
-left=min;
-right=max;
-
-diad * left_list,* right_list;
-left_list=malloc(left*sizeof(diad));
-right_list=malloc((N-right-1)*sizeof(diad));
-
-for(i=0; i<left; i++) {
-  left_list[i].upsos=list[i].upsos;
-  left_list[i].tribe=list[i].tribe;
-}
-
-for(i=right+1; i<N; i++) {
-  right_list[i-right-1].upsos=list[i].upsos;
-  right_list[i-right-1].tribe=list[i].tribe;
-}
-
-for(i=min; i<=max;i++)
-  check[list[i].tribe-1]=1;
-
-quicksort_tribe(left_list,0,left-1);
-quicksort_tribe(right_list,0,N-right-2);
-
-long long left_index,right_index;
+track=i;
+for (i=0; i<K; i++)
+ team[i]=0;
 
 
 
 
-/*for (i=0; i<left; i++ ){
-  printf("%lld %lld \n", left_list[i].tribe,left_list[i].upsos);
 
-}
-printf("\n");
-for(i=0;i<N-right-1; i++)
-  printf("%lld %lld \n", right_list[i].tribe,right_list[i].upsos);
-*/
-
-free(check);
+free(team);
 free(list);
 return 0;
 }
