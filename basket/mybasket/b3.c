@@ -60,9 +60,9 @@ flag_right=0;
 max=0;
 min=MAX ;    ////// tipota
 printf("entering partition, print list for first time\n");
-for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
-  printf("%lld ",list[i].upsos);
-}
+//for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
+//  printf("%lld ",list[i].upsos);
+//}
 printf("\n");
 
 for (i=left; i<right; i++) {  //for (i=0; i<N; i++) {
@@ -118,8 +118,8 @@ if( min < max)
 printf("j is: %lld",j);
 printf("\nprinting list 2nd time after partitin\n");
 
-for(i=left;i<right; i++)//for(i=0; i<N; i++)
-  printf("%lld ",list[i].upsos);
+//for(i=left;i<right; i++)//for(i=0; i<N; i++)
+//  printf("%lld ",list[i].upsos);
 printf("\n");
 
 
@@ -200,15 +200,15 @@ if (flag_right==1 && flag_left==1/* && answer!=0*/ ) {
  partition(list,K,right-(j+1),j+1,right);             //////////////
  
  
-}/* else if (flag_right==1 && flag_left==0 && answer!=0) {
+} else if (flag_right==1 && flag_left==0 && answer!=0) {
  printf("case 2 starts\n");
- partition(list,K,right-left,j+1,right);
+ partition(list,K,right-(j+1),j+1,right);
  
-}  else if (flag_right==0 && flag_left==1 && answer !=0 ){
+} else if (flag_right==0 && flag_left==1 && answer !=0 ){
  printf("case 3 starts\n");
- partition(list,K,j+1,0,j+1);  
+ partition(list,K,j+1-left,left,j+1);  
 
-} else  exit(0);*/  
+}/* else  exit(0);*/  
 
 
 }
