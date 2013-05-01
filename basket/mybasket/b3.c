@@ -58,32 +58,30 @@ counter=K;
 flag_left=0;
 flag_right=0;
 max=0;
-
+min=MAX ;    ////// tipota
 printf("entering partition, print list for first time\n");
-//for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
-//  printf("%lld ",list[i].upsos);
-//}
+for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
+  printf("%lld ",list[i].upsos);
+}
 printf("\n");
 
-//min=list[left].upsos;
-//max=list[left].upsos;
-
 for (i=left; i<right; i++) {  //for (i=0; i<N; i++) {
- max+=list[i].upsos;
+// max+=list[i].upsos;
 // max=max%10000000000;
-//if (list[i].upsos < min ) 
-//  min =list[i].upsos;
-//if (list[i].upsos > max)
-//  max =list[i].upsos;
+if (list[i].upsos < min ) 
+  min =list[i].upsos;
+if (list[i].upsos > max)
+  max =list[i].upsos;
 }
 
- avg= max/(right-left); /// xtupaei floating poiny exception ka8ws diairw me to 0 
-//avg = (min+max)/2;
+// avg= max/(right-left);     //j-1); /// xtupaei floating poiny exception ka8ws diairw me to 0 
+// printf("avg :%lld \n",avg);
+avg = (max-min)/2;
+printf("max min avg : %lld %lld %lld \n",max,min,avg);
 
-
- diff=abs(list[0].upsos,avg);
- pivot=0;
-for(i=left; i<right; i++){  // for(i=0; i<N; i++) {
+ diff=abs(list[left].upsos,avg);   ///0
+ pivot=left;   ///0 
+for(i=left; i<right; i++){  
    if (abs(list[i].upsos,avg)<diff) {
      diff=abs(list[i].upsos,avg);
      pivot=i;
@@ -117,12 +115,14 @@ if( min < max)
       swap(&list[min],&list[j]);
       
    }
-
+printf("j is: %lld",j);
 printf("\nprinting list 2nd time after partitin\n");
 
-//for(i=left;i<right; i++)//for(i=0; i<N; i++)
-//  printf("%lld ",list[i].upsos);
+for(i=left;i<right; i++)//for(i=0; i<N; i++)
+  printf("%lld ",list[i].upsos);
 printf("\n");
+
+
 
 track=left;
 while(track<=j) {
@@ -137,13 +137,14 @@ while(track<=j) {
 if (counter==0)
   flag_left=1;
 
+
 counter=K;
 for(i=0; i<K; i++)
   team[i]=0;
 
 track=right-1;   //-1
 //printf("check here j %lld:\n",j);
-//printf("right = %lld \n",right);
+printf("right = %lld \n",right);
 while(track>j) {
 // printf("check track and j : %lld %lld \n",track, j );
  if(team[list[track].tribe-1]==0) {
@@ -162,16 +163,16 @@ printf("%d %d \n",flag_right,flag_left);
 
 for(i=0; i<K; i++) {
   team[i]=MAX;
-
-  
 }
-//vres lisi me sukrisi diaforwn gia ti mesaia periptwsi
+
+//vres lisi me sukrisi diaforwn gia ti mesaia periptwsi-pithanws provlimatiko.
 for(i=left; i<right; i++) {  
   track=list[i].upsos;
   diff= key-track;
   if (abs(diff,0) < abs(team[list[i].tribe-1],0))
     team[list[i].tribe-1]=diff;
 }
+
 
 
 for(i=0; i<K; i++) {
@@ -189,17 +190,17 @@ temp = max-min;
 if (temp < answer)
   answer=temp;
 printf("answer : %lld\n",answer);
+
 //printf("flags %d %d",flag_left, flag_right);
 //free(team);
 
-
-if (flag_right==1 && flag_left==1 && answer!=0 ) { 
+if (flag_right==1 && flag_left==1/* && answer!=0*/ ) { 
  printf("case 1 starts\n");
- partition(list,K,j+1,0,j+1);
- partition(list,K,right-left,j+1,right); 
+ partition(list,K,j+1-left, left, j+1);               ///-left
+ partition(list,K,right-(j+1),j+1,right);             //////////////
  
  
-} else if (flag_right==1 && flag_left==0 && answer!=0) {
+}/* else if (flag_right==1 && flag_left==0 && answer!=0) {
  printf("case 2 starts\n");
  partition(list,K,right-left,j+1,right);
  
@@ -207,7 +208,7 @@ if (flag_right==1 && flag_left==1 && answer!=0 ) {
  printf("case 3 starts\n");
  partition(list,K,j+1,0,j+1);  
 
-} else  exit(0);  
+} else  exit(0);*/  
 
 
 }
