@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define max(x,y) (((x) > (y)) ? (x) : (y))
 #define abs(x,y) (((x) >= (y)) ? (x-y) : (y-x))
-#define MAX 1000000    //na diorthwthei katalilla
+#define MAX 9999999999    //na diorthwthei katalilla
 
 typedef struct {
     long long int upsos;  
@@ -65,11 +65,20 @@ for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
 }
 printf("\n");
 
+min=list[left].upsos;
+max=list[left].upsos;
+
 for (i=left; i<right; i++) {  //for (i=0; i<N; i++) {
- max+=list[i].upsos;
+// max+=list[i].upsos;
+if (list[i].upsos < min ) 
+  min =list[i].upsos;
+if (list[i].upsos > max)
+  max =list[i].upsos;
 }
 
- avg= max/N; /// xtupaei floating poiny exception ka8ws diairw me to 0 
+// avg= max/N; /// xtupaei floating poiny exception ka8ws diairw me to 0 
+avg = (min+max)/2;
+
 
  diff=abs(list[0].upsos,avg);
  pivot=0;
@@ -131,8 +140,11 @@ counter=K;
 for(i=0; i<K; i++)
   team[i]=0;
 
-track=right;
+track=right-1;   //-1
+printf("check here j %lld:\n",j);
+printf("right = %lld \n",right);
 while(track>j) {
+ printf("check track and j : %lld %lld \n",track, j );
  if(team[list[track].tribe-1]==0) {
    team[list[track].tribe-1]=1;
    counter--;
@@ -140,7 +152,7 @@ while(track>j) {
  } else
    track--;
 }
-
+printf("check here for counter : %lld \n",counter);
 if(counter==0)
   flag_right=1;
 
@@ -160,13 +172,9 @@ for(i=left; i<right; i++) {      //antikatestisa to 0,N
     team[list[i].tribe-1]=diff;
 }
 
-//printf("key %lld\n",key);
-//printf("\n");
+
 for(i=0; i<K; i++) {
-//  printf("team[i] arxika : %lld ",team[i]);
-//  printf("\n key %lld \n",key);
   team[i]+=key;
-//  printf("%lld ", team[i]);
 }
 
 min=max=team[0];
@@ -181,7 +189,7 @@ if (temp < answer)
   answer=temp;
 printf("answer : %lld\n",answer);
 printf("flags %d %d",flag_left, flag_right);
-free(team);
+//free(team);
 
 
 if (flag_right==1 && flag_left==1 && answer!=0 ) { 
