@@ -13,27 +13,28 @@ long long int answer=MAX;
 
 void swap (diad *x, diad *y);
 int main (int argc, char ** argv) {
-void partition (diad list[], long long, long long,long long,long long);
+void partition (diad list[], long long team[], long long, long long,long long,long long);
 
 FILE * fp;
-long long N,K,i,counter;
+long long N,K,i;
 diad * list;
-counter=0;
+long long * team;
+
 
 fp=fopen(argv[1],"r");
 fscanf(fp,"%lld %lld",&N,&K);
 
 list=malloc(N*sizeof(diad));
-
+team=calloc(K,sizeof(long long));
 for(i=0; i<N; i++) {
   fscanf(fp,"%lld",&list[i].tribe);
   fscanf(fp,"%lld",&list[i].upsos);
 }
 
 
-partition(list,K,N,0,N);    // ekana to N-1, N
-
-
+partition(list,team,K,N,0,N);    // ekana to N-1, N
+printf("%lld \n",answer);
+//free(team);
 free(list);
 return 0;
 }
@@ -47,37 +48,34 @@ void swap (diad * x, diad * y) {
 }
 
 
-void partition(diad list[], long long K,long long N, long long left, long long right) {
+void partition(diad list[],long long team[], long long K,long long N, long long left, long long right) {
 
 long long counter,avg,diff,i,pivot,key,j,min,max,track,temp;
 int flag_left, flag_right;
-long long * team;
-team=calloc(K,sizeof(long long));
+for(i=0; i<K; i++)
+  team[i]=0;
 
 counter=K;
 flag_left=0;
 flag_right=0;
 max=0;
-min=MAX ;    ////// tipota
-printf("entering partition, print list for first time\n");
+min=MAX ;   
+//printf("entering partition, print list for first time\n");
 //for(i=left; i<right; i++){  //check ekana allagi se sxesi me panw
 //  printf("%lld ",list[i].upsos);
 //}
-printf("\n");
-
+//printf("\n");
+//printf("left, right : %lld %lld",left,right);
 for (i=left; i<right; i++) {  //for (i=0; i<N; i++) {
-// max+=list[i].upsos;
-// max=max%10000000000;
 if (list[i].upsos < min ) 
   min =list[i].upsos;
 if (list[i].upsos > max)
   max =list[i].upsos;
 }
 
-// avg= max/(right-left);     //j-1); /// xtupaei floating poiny exception ka8ws diairw me to 0 
-// printf("avg :%lld \n",avg);
-avg = (max-min)/2;
-printf("max min avg : %lld %lld %lld \n",max,min,avg);
+
+avg = (max/2) +(min/2);
+//printf("max min avg : %lld %lld %lld \n",max,min,avg);
 
  diff=abs(list[left].upsos,avg);   ///0
  pivot=left;   ///0 
@@ -88,7 +86,7 @@ for(i=left; i<right; i++){
     } 
  }
 
-printf("pivot : %lld \n",list[pivot].upsos);
+//printf("pivot : %lld \n",list[pivot].upsos);
 
 min=left;
 max=right;
@@ -115,12 +113,12 @@ if( min < max)
       swap(&list[min],&list[j]);
       
    }
-printf("j is: %lld",j);
-printf("\nprinting list 2nd time after partitin\n");
+//printf("j is: %lld",j);
+//printf("\nprinting list 2nd time after partitin\n");
 
 //for(i=left;i<right; i++)//for(i=0; i<N; i++)
 //  printf("%lld ",list[i].upsos);
-printf("\n");
+//printf("\n");
 
 
 
@@ -144,7 +142,7 @@ for(i=0; i<K; i++)
 
 track=right-1;   //-1
 //printf("check here j %lld:\n",j);
-printf("right = %lld \n",right);
+//printf("right = %lld \n",right);
 while(track>j) {
 // printf("check track and j : %lld %lld \n",track, j );
  if(team[list[track].tribe-1]==0) {
@@ -154,12 +152,12 @@ while(track>j) {
  } else
    track--;
 }
-printf("check here for counter : %lld \n",counter);
+//printf("check here for counter : %lld \n",counter);
 if(counter==0)
   flag_right=1;
 
 
-printf("%d %d \n",flag_right,flag_left);
+//printf("%d %d \n",flag_right,flag_left);
 
 for(i=0; i<K; i++) {
   team[i]=MAX;
@@ -189,26 +187,25 @@ for(i=0; i<K; i++) {
 temp = max-min;
 if (temp < answer)
   answer=temp;
-printf("answer : %lld\n",answer);
+//printf("answer : %lld\n",answer);
 
 //printf("flags %d %d",flag_left, flag_right);
 //free(team);
 
-if (flag_right==1 && flag_left==1/* && answer!=0*/ ) { 
- printf("case 1 starts\n");
- partition(list,K,j+1-left, left, j+1);               ///-left
- partition(list,K,right-(j+1),j+1,right);             //////////////
+if (flag_right==1 && flag_left==1 && N>K ) { 
+// printf("case 1 starts\n");
+ partition(list,team,K,j+1-left, left, j+1);              
+ partition(list,team,K,right-(j+1),j+1,right);             
  
  
-} else if (flag_right==1 && flag_left==0 && answer!=0) {
- printf("case 2 starts\n");
- partition(list,K,right-(j+1),j+1,right);
+} else if (flag_right==1 && flag_left==0 && N>K  ) {
+// printf("case 2 starts K, j , right :%lld, %lld, %lld \n",K, j,right);
+ partition(list,team,K,right-(j+1),j+1,right);
  
-} else if (flag_right==0 && flag_left==1 && answer !=0 ){
- printf("case 3 starts\n");
- partition(list,K,j+1-left,left,j+1);  
+} else if (flag_right==0 && flag_left==1 && N >K ){
+// printf("case 3 starts\n");
+ partition(list,team,K,j+1-left,left,j+1);  
 
 }/* else  exit(0);*/  
-
 
 }
