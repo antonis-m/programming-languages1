@@ -25,7 +25,7 @@ fp=fopen(argv[1],"r");
 fscanf(fp,"%lld %lld",&N,&K);
 
 list=malloc(N*sizeof(diad));
-team=calloc(K,sizeof(long long));
+team=malloc(K*sizeof(long long));
 for(i=0; i<N; i++) {
   fscanf(fp,"%lld",&list[i].tribe);
   fscanf(fp,"%lld",&list[i].upsos);
@@ -36,6 +36,7 @@ partition(list,team,K,N,0,N);    // ekana to N-1, N
 printf("%lld \n",answer);
 //free(team);
 free(list);
+//free(team);
 return 0;
 }
 
@@ -55,6 +56,8 @@ int flag_left, flag_right;
 for(i=0; i<K; i++)
   team[i]=0;
 
+key=0;
+j=0;
 counter=K;
 flag_left=0;
 flag_right=0;
@@ -190,7 +193,7 @@ if (temp < answer)
 //printf("answer : %lld\n",answer);
 
 //printf("flags %d %d",flag_left, flag_right);
-//free(team);
+
 
 if (flag_right==1 && flag_left==1 && N>K ) { 
 // printf("case 1 starts\n");
