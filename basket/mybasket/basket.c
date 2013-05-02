@@ -27,7 +27,6 @@ check=malloc(K*sizeof(long long));
 
 
 
-
 for(i=0; i<N; i++) {
   fscanf(fp,"%lld",&list[i].tribe);
   fscanf(fp,"%lld",&list[i].upsos);
@@ -43,8 +42,8 @@ counter=K;
 i=j=-1;
 flag_f=1;
 flag_b=0;
- 
-while ( i<=N ) {
+answer=MAX;
+while ( i<N ) {
   i++;
   if (check[list[i].tribe -1] == -1) {
     check[list[i].tribe-1]=list[i].upsos;
@@ -56,7 +55,7 @@ while ( i<=N ) {
   if (counter == 0 && (i<=N)) 
      flag_b=1; 
     
-  
+
   while ((j<=i) && (flag_b==1)) {
     j++;
     if( check[list[j].tribe-1] !=list[j].upsos )
@@ -72,7 +71,7 @@ while ( i<=N ) {
 //      printf("answer is %lld \n", answer);
     }
 
-  }
+  } 
 
 }
 
